@@ -14,13 +14,13 @@ It allows users to:
 - Track progress
 - View profile and performance  
 
-The application works without a backend and uses **localStorage** for data persistence.
+The application works without a backend and uses localStorage for data persistence.
 
 ---
 
 ## 🚀 Features
 
-### ✅ Pages
+### 🔹 Pages
 - Dashboard – Overview of progress and statistics  
 - Courses – List of available courses  
 - Quiz – Dynamic quiz system  
@@ -28,7 +28,7 @@ The application works without a backend and uses **localStorage** for data persi
 
 ---
 
-### ✅ Functional Features
+### 🔹 Functional Highlights
 - Dynamic quiz generation using JavaScript  
 - Score and grade calculation  
 - Progress tracking   
@@ -37,7 +37,7 @@ The application works without a backend and uses **localStorage** for data persi
 
 ---
 
-### ✅ JavaScript Concepts Used
+### 🔹 JavaScript Concepts Used
 - Arrays & Objects  
 - DOM Manipulation  
 - Events (onclick, onchange)  
@@ -46,7 +46,7 @@ The application works without a backend and uses **localStorage** for data persi
 
 ---
 
-### ✅ CSS Features
+### 🔹 CSS Features
 - CSS Grid (Dashboard)  
 - Flexbox (Cards layout)  
 - Responsive design (Media Queries)  
@@ -54,7 +54,7 @@ The application works without a backend and uses **localStorage** for data persi
 
 ---
 
-### ✅ Testing
+### 🔹 Testing (Jest)
 - Jest test cases implemented for:
   - Percentage calculation  
   - Grade calculation  
