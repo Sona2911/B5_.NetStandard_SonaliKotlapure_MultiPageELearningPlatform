@@ -321,12 +321,12 @@ document.getElementById("avatar").src = avatar;
 
 /* DATA */
 
-let completedCourses = localStorage.getItem("completedCourses") || 0;
+let completedCourses = JSON.parse(localStorage.getItem("completedCourses")) || [];
 let attempts = localStorage.getItem("quizAttempts") || 0;
 let score = localStorage.getItem("quizScore") || 0;
 let grade = localStorage.getItem("quizGrade") || "-";
 
-document.getElementById("completedCourses").innerText = completedCourses;
+document.getElementById("completedCourses").innerText = completedCourses.length;
 document.getElementById("attempts").innerText = attempts;
 document.getElementById("score").innerText = score;
 document.getElementById("grade").innerText = grade;
