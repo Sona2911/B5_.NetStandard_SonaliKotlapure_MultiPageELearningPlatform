@@ -96,8 +96,3 @@ Elearningplatform/
 🔗 Click here to view the live project:
 
 👉 https://sona2911.github.io/SonaliKotlapure_.NetFSD_upGrad_B5_Python/
-
-🔹 Note: Project files are inside the `Elearingplatform/` folder.
-
-Direct access:
-👉 https://sona2911.github.io/SonaliKotlapure_.NetFSD_upGrad_B5_Python/Elearingplatform/index.html
