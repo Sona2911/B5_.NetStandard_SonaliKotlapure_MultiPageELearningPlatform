@@ -1,0 +1,405 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>E-Learning Courses</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+
+/* ======================
+ANIMATED BACKGROUND
+====================== */
+
+body{
+margin:0;
+font-family:'Poppins',sans-serif;
+background: linear-gradient(270deg,#667eea,#764ba2,#ff758c,#ff7eb3);
+background-size:600% 600%;
+animation:gradientBG 10s ease infinite;
+color:white;
+}
+
+@keyframes gradientBG{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+
+/* ======================
+FLOATING BLOBS
+====================== */
+
+.blob{
+position:absolute;
+border-radius:50%;
+background:rgba(255,255,255,0.1);
+filter:blur(40px);
+animation:float 8s infinite ease-in-out;
+}
+
+.blob1{width:200px;height:200px;top:10%;left:10%;}
+.blob2{width:250px;height:250px;bottom:10%;right:10%;animation-delay:2s;}
+
+@keyframes float{
+0%,100%{transform:translateY(0);}
+50%{transform:translateY(-30px);}
+}
+
+
+/* ======================
+HEADER
+====================== */
+
+.header{
+text-align:center;
+padding:20px;
+background:rgba(0,0,0,0.3);
+backdrop-filter:blur(10px);
+}
+
+
+/* ======================
+COURSE CARD
+====================== */
+
+.course-card{
+background:rgba(11, 11, 11, 0.15);
+backdrop-filter:blur(15px);
+border-radius:20px;
+padding:25px;
+text-align:center;
+box-shadow:0 10px 30px rgba(0,0,0,0.3);
+transition:0.3s;
+cursor:pointer;
+}
+
+.course-card:hover{
+transform:translateY(-10px) scale(1.05);
+box-shadow:0 15px 40px rgba(0,0,0,0.4);
+}
+
+
+/* ICON */
+
+.course-icon{
+font-size:45px;
+margin-bottom:10px;
+}
+
+
+/* MODAL */
+
+.modal-content{
+    color: black;
+border-radius:20px;
+animation:fadeIn 0.5s ease;
+}
+
+.modal-body p {
+    color: black;
+}
+
+.modal-header h5 {
+    color: black;
+}
+
+@keyframes fadeIn{
+from{opacity:0; transform:translateY(-20px);}
+to{opacity:1; transform:translateY(0);}
+}
+
+
+/* BUTTON */
+
+.btn-custom{
+border:none;
+border-radius:25px;
+padding:8px 20px;
+background:linear-gradient(45deg,#ff7eb3,#ff758c);
+color:rgb(13, 51, 224);
+transition:0.3s;
+}
+
+.btn-custom:hover{
+transform:scale(1.1);
+}
+
+
+/* DARK MODE */
+
+.dark{
+background:#121212 !important;
+color:white;
+}
+
+.dark .course-card{
+background:#1e1e1e;
+}
+
+
+/* ✅ SMALL ADDITION FOR TABLE LOOK */
+.table{
+border-radius:15px;
+overflow:hidden;
+box-shadow:0 10px 30px rgba(0,0,0,0.3);
+}
+
+.table th{
+background:linear-gradient(45deg,#667eea,#764ba2);
+color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- BLOBS -->
+
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
+
+
+<!-- HEADER -->
+
+<div class="header">
+
+<h2><i class="fa-solid fa-book"></i> Courses</h2>
+
+<button onclick="toggleMode()" class="btn-custom mt-2">🌙 Toggle Mode</button>
+
+</div>
+
+
+<!-- NAV -->
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+<div class="container">
+
+<a class="navbar-brand" href="dashboard.html">Learnify 📚🧑‍💻🎓</a>
+
+<ul class="navbar-nav">
+
+<li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+<li class="nav-item"><a class="nav-link active" href="#">Courses</a></li>
+<li class="nav-item"><a class="nav-link" href="quiz.html">Quiz</a></li>
+<li class="nav-item"><a class="nav-link" href="profile.html">Profile</a></li>
+
+</ul>
+
+</div>
+
+</nav>
+<!--  BREADCRUMB -->
+<nav aria-label="breadcrumb" class="container mt-2">
+<ol class="breadcrumb">
+<li class="breadcrumb-item"><a href="dashboard.html" style="color: white;">Home</a></li>
+<li class="breadcrumb-item active" style="color: white;">Courses</li>
+</ol>
+</nav>
+
+<div class="container mt-5">
+
+<div class="row g-4">
+
+<!-- COURSE TEMPLATE -->
+
+<div class="col-md-3">
+<div class="course-card" onclick="showCourse('Web Development','Learn HTML, CSS, JavaScript and build modern websites.')">
+<i class="fa-solid fa-code course-icon"></i>
+<h5>Web Development</h5>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="course-card" onclick="showCourse('Python','Learn Python for automation and data science.')">
+<i class="fa-brands fa-python course-icon"></i>
+<h5>Python</h5>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="course-card" onclick="showCourse('SQL','Master database queries and joins.')">
+<i class="fa-solid fa-database course-icon"></i>
+<h5>SQL</h5>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="course-card" onclick="showCourse('Java','Learn OOP concepts and applications.')">
+<i class="fa-brands fa-java course-icon"></i>
+<h5>Java</h5>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="course-card" onclick="showCourse('Machine Learning','Understand AI and ML algorithms.')">
+<i class="fa-solid fa-robot course-icon"></i>
+<h5>Machine Learning</h5>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="course-card" onclick="showCourse('Cloud','Learn AWS and cloud systems.')">
+<i class="fa-solid fa-cloud course-icon"></i>
+<h5>Cloud</h5>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="course-card" onclick="showCourse('Data Science','Analyze data and visualize insights.')">
+<i class="fa-solid fa-chart-line course-icon"></i>
+<h5>Data Science</h5>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="course-card" onclick="showCourse('DevOps','CI/CD pipelines and automation tools.')">
+<i class="fa-solid fa-gears course-icon"></i>
+<h5>DevOps</h5>
+</div>
+</div>
+
+</div>
+
+<!-- ✅ TABLE ADDED IN CORRECT PLACE -->
+<table class="table mt-5 bg-white text-dark">
+<tr><th>Course</th><th>Description</th></tr>
+<tr><td>Web</td><td>HTML CSS JS</td></tr>
+<tr><td>Python, Java ,SQL</td><td>Programming basics</td></tr>
+</table>
+
+
+</div>
+
+
+<!-- MODAL -->
+
+<div class="modal fade" id="courseModal">
+
+<div class="modal-dialog modal-dialog-centered">
+
+<div class="modal-content">
+
+<div class="modal-header justify-content-center ">
+<h5 id="courseTitle" class="w-100 text-center"></h5>
+<button class="btn-close position-absolute end-0 me-3" data-bs-dismiss="modal"></button>
+</div>
+
+<div class="modal-body text-center">
+
+<p id="courseDesc"></p>
+<!-- ✅ ORDERED LIST ADDED -->
+<ol id="courseList" style="text-align:left;">
+<!-- <li><b>Introduction:</b> Web basics - HTML & CSS</li>
+<li><b>Basics:</b> Core concepts and fundamentals - JavaScript</li>
+<li><b>Advanced:</b> Real-world projects and applications</li> -->
+</ol>
+
+<a href="quiz.html" class="btn btn-custom">Start Quiz</a>
+
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+/* MODAL */
+
+function showCourse(title,desc){
+
+document.getElementById("courseTitle").innerText = title;
+document.getElementById("courseDesc").innerText = desc;
+
+
+
+let list = "";
+
+/* Dynamic content */
+switch(title){
+
+case "Web Development":
+list = `
+<li><b>Introduction:</b> Web basics - HTML & CSS</li>
+<li><b>Basics:</b> Core concepts - JavaScript</li>
+<li><b>Advanced:</b> Build real websites</li>`;
+break;
+
+case "Python":
+list = `
+<li><b>Introduction:</b> Python syntax & setup</li>
+<li><b>Basics:</b> Loops, functions, data types</li>
+<li><b>Advanced:</b> Projects & automation</li>`;
+break;
+case "SQL":
+list = `
+<li><b>Introduction:</b> Database concepts</li>
+<li><b>Basics:</b> Queries, joins</li>
+<li><b>Advanced:</b> Complex queries & optimization</li>`;
+break;
+
+case "Java":
+list = `
+<li><b>Introduction:</b> OOP concepts</li>
+<li><b>Basics:</b> Classes, objects</li>
+<li><b>Advanced:</b> Real-world applications</li>`;
+break;
+
+default:
+list = `
+<li><b>Introduction:</b> Course overview</li>
+<li><b>Basics:</b> Fundamental concepts</li>
+<li><b>Advanced:</b> Practical applications</li>`;
+}
+
+/* Insert into HTML */
+document.getElementById("courseList").innerHTML = list;
+
+
+
+new bootstrap.Modal(document.getElementById("courseModal")).show();
+
+}
+
+
+/* DARK MODE */
+
+function toggleMode(){
+
+document.body.classList.toggle("dark");
+
+localStorage.setItem("mode",
+document.body.classList.contains("dark") ? "dark":"light");
+
+}
+
+if(localStorage.getItem("mode") === "dark"){
+document.body.classList.add("dark");
+}
+
+</script>
+
+</body>
+</html>
+

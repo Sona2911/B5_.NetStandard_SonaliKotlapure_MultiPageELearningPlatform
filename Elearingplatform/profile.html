@@ -1,0 +1,371 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Learner Profile</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+
+/* ======================
+ANIMATED BACKGROUND
+====================== */
+
+body{
+margin:0;
+font-family:'Poppins',sans-serif;
+background: linear-gradient(270deg,#667eea,#764ba2,#ff758c,#ff7eb3);
+background-size:600% 600%;
+animation:gradientBG 10s ease infinite;
+color:white;
+}
+
+@keyframes gradientBG{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+
+/* BLOBS */
+
+.blob{
+position:absolute;
+border-radius:50%;
+background:rgba(255,255,255,0.1);
+filter:blur(40px);
+animation:float 8s infinite ease-in-out;
+}
+
+.blob1{width:200px;height:200px;top:10%;left:10%;}
+.blob2{width:250px;height:250px;bottom:10%;right:10%;}
+
+
+/* HEADER */
+
+.header{
+text-align:center;
+padding:20px;
+background:rgba(0,0,0,0.3);
+backdrop-filter:blur(10px);
+}
+
+
+/* NAVBAR */
+
+.navbar{
+box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+
+/* PROFILE CARD */
+
+.profile-card{
+background:rgba(255,255,255,0.15);
+backdrop-filter:blur(20px);
+border-radius:20px;
+padding:40px;
+box-shadow:0 10px 30px rgba(0,0,0,0.3);
+text-align:center;
+animation:fadeIn 1s ease;
+}
+
+
+/* AVATAR */
+
+.profile-img{
+width:120px;
+height:120px;
+border-radius:50%;
+border:4px solid white;
+object-fit:cover;
+}
+
+
+/* INFO BOX */
+
+.info-box{
+background:rgba(255,255,255,0.2);
+border-radius:15px;
+padding:20px;
+margin-top:20px;
+transition:0.3s;
+}
+
+.info-box:hover{
+transform:translateY(-8px) scale(1.03);
+}
+
+
+/* TABLE */
+
+.result-table{
+background:rgba(255,255,255,0.15);
+border-radius:15px;
+overflow:hidden;
+backdrop-filter:blur(10px);
+color:white;
+}
+
+
+/* BUTTON */
+
+.btn-custom{
+border:none;
+border-radius:25px;
+padding:8px 20px;
+background:linear-gradient(45deg,#ff7eb3,#ff758c);
+color:white;
+transition:0.3s;
+}
+
+.btn-custom:hover{
+transform:scale(1.1);
+}
+
+
+/* FLOAT NAV */
+
+.quick-nav{
+position:fixed;
+right:20px;
+bottom:20px;
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+.quick-nav a{
+width:50px;
+height:50px;
+background:linear-gradient(45deg,#ff7eb3,#ff758c);
+color:white;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:50%;
+box-shadow:0 5px 15px rgba(0,0,0,0.3);
+transition:0.3s;
+}
+
+.quick-nav a:hover{
+transform:scale(1.1);
+}
+
+
+/* DARK MODE */
+
+.dark{
+background:#121212 !important;
+}
+
+.dark .profile-card,
+.dark .info-box,
+.dark .result-table{
+background:#1e1e1e;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
+
+
+<!-- HEADER -->
+
+<div class="header">
+
+<h2><i class="fa-solid fa-user"></i> Profile</h2>
+
+<button onclick="toggleMode()" class="btn-custom mt-2">🌙 Mode</button>
+
+</div>
+
+
+<!-- NAVBAR -->
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+<div class="container">
+
+<a class="navbar-brand" href="dashboard.html">Learnify 📚🧑‍💻🎓🧠</a>
+
+<ul class="navbar-nav ms-auto">
+
+<li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+<li class="nav-item"><a class="nav-link" href="courses.html">Courses</a></li>
+<li class="nav-item"><a class="nav-link" href="quiz.html">Quiz</a></li>
+<li class="nav-item"><a class="nav-link active" href="#">Profile</a></li>
+
+</ul>
+
+</div>
+
+</nav>
+<!-- ✅ BREADCRUMB -->
+<nav aria-label="breadcrumb" class="container mt-2">
+<ol class="breadcrumb">
+<li class="breadcrumb-item"><a href="dashboard.html" style="color: white;">Home</a></li>
+<li class="breadcrumb-item active" style="color: white;">Profile</li>
+</ol>
+</nav>
+
+<!-- MAIN -->
+
+<div class="container mt-4">
+
+<div class="row justify-content-center">
+
+<div class="col-md-5">
+
+<div class="profile-card">
+
+<img id="avatar" class="profile-img">
+
+<h3 id="username">Student</h3>
+
+<p>E-Learning Member</p>
+
+
+<div class="info-box">
+<h5>Completed Courses</h5>
+<h3 id="completedCourses"></h3>
+</div>
+
+<div class="info-box">
+<h5>Quiz Attempts</h5>
+<h3 id="attempts"></h3>
+</div>
+
+<div class="info-box">
+<h5>Last Result</h5>
+
+<p>Score: <span id="score"></span>%</p>
+<p>Grade: <span id="grade"></span></p>
+
+<div class="progress">
+<div id="progressBar" class="progress-bar bg-success"></div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- HISTORY -->
+
+<div class="container mt-5">
+
+<h4>📊 Quiz History</h4>
+
+<table class="table result-table">
+
+<thead>
+<tr>
+<th>Course</th>
+<th>Score</th>
+<th>%</th>
+<th>Grade</th>
+</tr>
+</thead>
+
+<tbody id="quizHistory"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+<footer class="text-center mt-5 p-3 bg-dark text-white">
+© 2026 Learnify a   E-Learning Platform
+</footer>
+
+
+<!-- FLOAT NAV -->
+
+<div class="quick-nav">
+<a href="dashboard.html"><i class="fa-solid fa-house"></i></a>
+<a href="quiz.html"><i class="fa-solid fa-pen"></i></a>
+</div>
+
+
+<script>
+
+/* USER */
+
+let username = localStorage.getItem("username") || "Student";
+let avatar = localStorage.getItem("avatar");
+
+document.getElementById("username").innerText = username;
+document.getElementById("avatar").src = avatar;
+
+
+/* DATA */
+
+let completedCourses = localStorage.getItem("completedCourses") || 0;
+let attempts = localStorage.getItem("quizAttempts") || 0;
+let score = localStorage.getItem("quizScore") || 0;
+let grade = localStorage.getItem("quizGrade") || "-";
+
+document.getElementById("completedCourses").innerText = completedCourses;
+document.getElementById("attempts").innerText = attempts;
+document.getElementById("score").innerText = score;
+document.getElementById("grade").innerText = grade;
+document.getElementById("progressBar").style.width = score + "%";
+
+
+/* HISTORY */
+
+let results = JSON.parse(localStorage.getItem("quizResults")) || [];
+
+let table = document.getElementById("quizHistory");
+
+results.forEach(r=>{
+table.innerHTML += `
+<tr>
+<td>${r.course.toUpperCase()}</td>
+<td>${r.score}/${r.total}</td>
+<td>${r.percentage}%</td>
+<td>${r.grade}</td>
+</tr>
+`;
+});
+
+
+/* DARK MODE */
+
+function toggleMode(){
+document.body.classList.toggle("dark");
+
+localStorage.setItem("mode",
+document.body.classList.contains("dark") ? "dark":"light");
+}
+
+if(localStorage.getItem("mode") === "dark"){
+document.body.classList.add("dark");
+}
+
+</script>
+
+</body>
+</html>
+
