@@ -1,5 +1,3 @@
-
-
 const quizzes = {
 web:[
 {question:"HTML stands for?",options:["Hyper Text Markup Language","High Text Machine Language","Hyper Tool Multi Language"],answer:"Hyper Text Markup Language"},
@@ -43,20 +41,20 @@ let currentQuiz = [];
 let selectedCourse = "";
 
 /* =========================
-   START QUIZ (ASYNC LOADING)
+   START QUIZ (FIXED)
 ========================= */
-async function startQuiz(course){
+function startQuiz(course){
+
+selectedCourse = course.toLowerCase();  // ✅ FIX
+localStorage.setItem("courseName", selectedCourse);
 
 document.getElementById("quizContainer").innerHTML = "Loading quiz...";
 
-await new Promise(resolve => setTimeout(resolve,1000));
-
-selectedCourse = course;
-currentQuiz = quizzes[course];
-
+setTimeout(()=>{
+currentQuiz = quizzes[selectedCourse];  // ✅ FIX
 document.getElementById("result").innerHTML = "";
-
 renderQuiz();
+},1000);
 }
 
 /* =========================
@@ -92,69 +90,90 @@ r.onchange = ()=> console.log("Answer selected");
 }
 
 /* =========================
-   SUBMIT QUIZ
+   SUBMIT QUIZ (FIXED)
 ========================= */
-function submitQuiz(){
+window.submitQuiz = function(){
 
-let score = 0;
+let answers = [];
+let score = 0; // ✅ ADDED
 
 currentQuiz.forEach((q,index)=>{
 let ans = document.querySelector(`input[name="q${index}"]:checked`);
-if(ans && ans.value === q.answer) score++;
+let value = ans ? ans.value.trim() : "";
+
+answers.push(value);
+
+// ✅ CALCULATE SCORE
+if(value === q.answer){
+  score++;
+}
 });
 
-// let percent = calculatePercentage(score,currentQuiz.length);
-let percent = Math.round(calculatePercentage(score,currentQuiz.length));
-let grade = calculateGrade(percent);
+/* ✅ CALCULATE PERCENT + GRADE */
+let percent = Math.round((score / currentQuiz.length) * 100);
+let grade;
 
-/* FEEDBACK */
-let feedback;
-switch(true){
-case percent >= 80: feedback="Excellent"; break;
-case percent >= 50: feedback="Good"; break;
-default: feedback="Needs Improvement";
-}
+if(percent >= 80) grade = "A";
+else if(percent >= 50) grade = "B";
+else grade = "Fail";
 
-/* RESULT UI */
-document.getElementById("result").innerHTML = `
-<div class="card p-3 mt-3 text-center">
-<h4>${selectedCourse.toUpperCase()} Result</h4>
-<p>Score: ${score}/${currentQuiz.length}</p>
-<p>Percentage: ${percent.toFixed(2)}%</p>
-<p>Grade: ${grade}</p>
-<p>${feedback}</p>
-</div>`;
-
-/* =========================
-   STORAGE (FIXED STRUCTURE)
-========================= */
-
-/* Save latest score */
+/* 🔥 SAVE DATA FOR PROFILE PAGE */
 localStorage.setItem("quizScore", percent);
 localStorage.setItem("quizGrade", grade);
 
-/* Attempts count */
+
 let attempts = parseInt(localStorage.getItem("quizAttempts")) || 0;
 localStorage.setItem("quizAttempts", attempts + 1);
 
-/* Last 5 results */
 let results = JSON.parse(localStorage.getItem("quizResults")) || [];
 results = results.slice(-4);
 
+
 results.push({
-course:selectedCourse,
-score,
-total:currentQuiz.length,
-percentage:percent.toFixed(2),
-grade
+    course: selectedCourse,
+    score: score,
+    total: currentQuiz.length,
+    percentage: percent,
+    grade: grade
 });
 
 localStorage.setItem("quizResults", JSON.stringify(results));
+/* ✅ SAVE COMPLETED COURSES (FIX) */
+let completedCourses = JSON.parse(localStorage.getItem("completedCourses")) || [];
 
-/* Completed courses handled in storage.js */
-if(percent >= 50 && typeof completeCourse === "function"){
-completeCourse(selectedCourse);
+if(!completedCourses.includes(selectedCourse)){
+    completedCourses.push(selectedCourse);
 }
+
+localStorage.setItem("completedCourses", JSON.stringify(completedCourses));
+/* 🔥 MAP COURSE → QUIZ ID */
+let quizMap = {
+  "web": 17,
+  "python": 18,
+  "sql": 19,
+  "java": 20
+};
+
+let quizId = quizMap[selectedCourse];
+
+/* DEBUG */
+console.log("Selected Course:", selectedCourse);
+console.log("QuizId:", quizId);
+console.log("Answers Sent:", answers);
+
+/* API CALL */
+fetch(`http://localhost:5117/api/quizzes/${quizId}/submit`, {
+method:"POST",
+headers:{ "Content-Type":"application/json" },
+body: JSON.stringify(answers)
+})
+.then(res=>res.json())
+.then(data=>{
+document.getElementById("result").innerHTML = `
+<h3 style="color:green;">Your Score: ${data.score}</h3>
+`;
+});
+
 }
 
 /* =========================

@@ -1,0 +1,1 @@
+SELECT CourseId, Title FROM Courses;

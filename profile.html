@@ -310,62 +310,59 @@ background:#1e1e1e;
 
 <script>
 
-/* USER */
-
-let username = localStorage.getItem("username") || "Student";
+window.onload = function(){
+// ✅ LOAD AVATAR
 let avatar = localStorage.getItem("avatar");
+if(avatar){
+    document.getElementById("avatar").src = avatar;
+}
 
-document.getElementById("username").innerText = username;
-document.getElementById("avatar").src = avatar;
+// ✅ LOAD USERNAME (from email OR fallback)
+let userName = localStorage.getItem("username") 
+            || localStorage.getItem("email") 
+            || "Student";
 
+document.getElementById("username").innerText = userName;
 
-/* DATA */
-
-let completedCourses = JSON.parse(localStorage.getItem("completedCourses")) || [];
+// ✅ Get data
 let attempts = localStorage.getItem("quizAttempts") || 0;
-let score = localStorage.getItem("quizScore") || 0;
-let grade = localStorage.getItem("quizGrade") || "-";
-
-document.getElementById("completedCourses").innerText = completedCourses.length;
-document.getElementById("attempts").innerText = attempts;
-document.getElementById("score").innerText = score;
-document.getElementById("grade").innerText = grade;
-document.getElementById("progressBar").style.width = score + "%";
-
-
-/* HISTORY */
-
 let results = JSON.parse(localStorage.getItem("quizResults")) || [];
 
+// ✅ FIXED ID
+document.getElementById("attempts").innerText = attempts;
+
+// ✅ Completed Courses
+let courses = [...new Set(results.map(r => r.course))];
+document.getElementById("completedCourses").innerText = courses.length;
+
+// ✅ Last Result (FIXED IDs)
+if(results.length > 0){
+    let last = results[results.length - 1];
+
+    document.getElementById("score").innerText = last.percentage;
+    document.getElementById("grade").innerText = last.grade;
+
+    // progress bar
+    document.getElementById("progressBar").style.width = last.percentage + "%";
+}
+
+// ✅ Quiz History
 let table = document.getElementById("quizHistory");
 
 results.forEach(r=>{
-table.innerHTML += `
-<tr>
-<td>${r.course.toUpperCase()}</td>
-<td>${r.score}/${r.total}</td>
-<td>${r.percentage}%</td>
-<td>${r.grade}</td>
-</tr>
-`;
+    let row = `
+    <tr>
+        <td>${r.course}</td>
+        <td>${r.score}/${r.total}</td>
+        <td>${r.percentage}%</td>
+        <td>${r.grade}</td>
+    </tr>
+    `;
+    table.innerHTML += row;
 });
 
-
-/* DARK MODE */
-
-function toggleMode(){
-document.body.classList.toggle("dark");
-
-localStorage.setItem("mode",
-document.body.classList.contains("dark") ? "dark":"light");
-}
-
-if(localStorage.getItem("mode") === "dark"){
-document.body.classList.add("dark");
-}
-
+};
 </script>
-
 </body>
 </html>
 

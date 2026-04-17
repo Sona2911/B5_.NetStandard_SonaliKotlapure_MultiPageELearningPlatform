@@ -61,6 +61,10 @@ padding:25px;
 text-align:center;
 box-shadow:0 10px 30px rgba(0,0,0,0.3);
 transition:0.3s;
+min-height: 180px;
+display: flex;
+flex-direction: column;
+justify-content: center;
 }
 
 .dashboard-card:hover{
@@ -227,7 +231,7 @@ Welcome, <span id="username"></span> 👋
 <div class="dashboard-card">
 <i class="fa-solid fa-rotate fa-2x"></i>
 <h5>Attempts</h5>
-<h3 id="attempts"></h3>
+<h3 id="attempts">0</h3>
 </div>
 </div>
 
@@ -235,7 +239,7 @@ Welcome, <span id="username"></span> 👋
 <div class="dashboard-card">
 <i class="fa-solid fa-chart-line fa-2x"></i>
 <h5>Score</h5>
-<h3 id="score"></h3>
+<h3 id="score">0%</h3>
 
 <div class="progress mt-2">
 <div id="progressBar" class="progress-bar bg-success"></div>
@@ -261,6 +265,58 @@ Welcome, <span id="username"></span> 👋
 
 
 <script>
+
+// ✅ LOAD RESULTS FROM BACKEND (FIXED)
+let userId = 1;
+
+fetch(`http://localhost:5117/api/results/${userId}`)
+.then(async res => {
+    if(!res.ok){
+        throw new Error("No results found");
+    }
+    const text = await res.text();
+    return text ? JSON.parse(text) : [];
+})
+.then(data=>{
+
+    console.log("Results:", data);
+
+    // ✅ Attempts
+    document.getElementById("attempts").innerText = data.length;
+
+    // ✅ Score
+    if(data.length > 0){
+        let last = data[data.length - 1];
+
+        let percent = (last.score / 3) * 100;
+document.getElementById("score").innerText = percent + "%";
+document.getElementById("progressBar").style.width = percent + "%";
+        document.getElementById("progressBar").style.width = last.score + "%";
+    }
+
+    // ✅ Recent Results (THIS WAS NOT RUNNING BEFORE)
+    let container = document.getElementById("recentResults");
+    container.innerHTML = "";
+
+    if(data.length === 0){
+        container.innerHTML = "<p>No quiz attempts yet</p>";
+        return;
+    }
+
+    data.slice(-3).reverse().forEach(r => {
+        container.innerHTML += `
+        <div class="quiz-card">
+            <strong>Quiz ID: ${r.quizId}</strong>
+            <p>Score: ${r.score}</p>
+        </div>`;
+    });
+
+})
+.catch(err=>{
+    console.log(err.message);
+
+});
+
 
 /* LOGIN CHECK */
 
@@ -304,44 +360,10 @@ window.location.href = "index.html";
 }
 
 
-/* LOAD DATA */
+/* LOCAL STORAGE (KEEPED SAME FOR NOW) */
 
-// let completedCourses = localStorage.getItem("completedCourses") || 0;
-
-let completedCourses = JSON.parse(localStorage.getItem("completedCourses")) || [];
-
- let attempts = localStorage.getItem("quizAttempts") || 0;
-let score = localStorage.getItem("quizScore") || 0;
-
-// document.getElementById("completedCourses").innerText = completedCourses;
-
+let completedCourses = JSON.parse(localStorage.getItem("completedCourses") || "[]");
 document.getElementById("completedCourses").innerText = completedCourses.length;
-document.getElementById("attempts").innerText = attempts;
-document.getElementById("score").innerText = score + "%";
-document.getElementById("progressBar").style.width = score + "%";
-
-
-/* QUIZ HISTORY */
-
-let results = JSON.parse(localStorage.getItem("quizResults")) || [];
-
-let container = document.getElementById("recentResults");
-
-results.slice(-3).reverse().forEach(r=>{
-
-container.innerHTML += `
-<div class="quiz-card">
-
-<strong>${r.course.toUpperCase()}</strong>
-
-<p>Score: ${r.score}/${r.total}</p>
-<p>Percentage: ${r.percentage}%</p>
-<p>Grade: ${r.grade}</p>
-
-</div>
-`;
-
-});
 
 </script>
 

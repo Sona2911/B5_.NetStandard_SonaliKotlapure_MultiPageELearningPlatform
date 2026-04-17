@@ -292,41 +292,62 @@ Login →
 let selectedAvatar = "";
 
 function selectAvatar(img){
-
 document.querySelectorAll(".avatar").forEach(a=>a.classList.remove("selected"));
-
 img.classList.add("selected");
-
 selectedAvatar = img.src;
-
 }
 
+/* ✅ FIXED LOGIN FUNCTION */
 function login(){
 
 let name = document.getElementById("username").value;
 
-if(name === ""){
-alert("Enter your name");
+/* ✅ FIX 1: CLOSE IF BLOCK */
+if(!name){
+alert("Please enter name");
 return;
 }
-
-if(selectedAvatar === ""){
-alert("Select avatar");
-return;
-}
-
-localStorage.setItem("username", name);
-localStorage.setItem("avatar", selectedAvatar);
 
 /* SHOW LOADER */
-
 document.getElementById("loader").style.display = "flex";
 
-/* REDIRECT */
+/* CREATE EMAIL */
+let email = name + Math.floor(Math.random()*1000) + "@test.com";
 
-setTimeout(()=>{
+/* API CALL */
+fetch("http://localhost:5117/api/users/register", {
+method: "POST",
+headers: { "Content-Type": "application/json" },
+body: JSON.stringify({
+  fullName: name,
+  email: email,
+  password: "123456"
+})
+})
+.then(async res => {
+  const text = await res.text();
+  try {
+    return JSON.parse(text);
+  } catch {
+    throw new Error(text);
+  }
+})
+.then(data => {
+
+/* ✅ SAVE DATA FOR PROFILE */
+localStorage.setItem("userId", data.userId);
+localStorage.setItem("username", name);
+localStorage.setItem("email", email);   // ✅ IMPORTANT
+localStorage.setItem("avatar", selectedAvatar);
+
+/* REDIRECT */
 window.location.href = "dashboard.html";
-},1500);
+
+})
+.catch(err=>{
+alert(err.message);
+document.getElementById("loader").style.display = "none";
+});
 
 }
 
